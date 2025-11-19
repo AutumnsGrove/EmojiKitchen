@@ -2,6 +2,8 @@
 
 A performant Python CLI tool that downloads emoji combinations from Google's Emoji Kitchen service.
 
+![😊 + 🎉](https://emojik.vercel.app/s/😊_🎉?size=80)
+
 **Status:** 🔬 Research Complete → 🚀 Ready for Implementation
 
 ---
@@ -242,6 +244,19 @@ This project is provided as-is for personal and educational use.
 **Documentation:** ⏳ Pending
 
 See `TODOS.md` for detailed task tracking.
+
+---
+
+## 🖼️ Examples
+
+Here are some example emoji combinations you can create:
+
+| Combination | Result |
+|-------------|--------|
+| ❤️ + 🔥 | ![❤️ + 🔥](https://emojik.vercel.app/s/❤️_🔥?size=80) |
+| 🐱 + 🌟 | ![🐱 + 🌟](https://emojik.vercel.app/s/🐱_🌟?size=80) |
+| 🎂 + 🎁 | ![🎂 + 🎁](https://emojik.vercel.app/s/🎂_🎁?size=80) |
+| 😎 + 🌴 | ![😎 + 🌴](https://emojik.vercel.app/s/😎_🌴?size=80) |
 
 ---
 
