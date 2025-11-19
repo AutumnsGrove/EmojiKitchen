@@ -568,7 +568,7 @@ dev = [
 
 ### Project Initialization (Orchestrator)
 ```bash
-cd /home/user/AgentBench/Projects/EmojiKitchen
+cd /home/user/EmojiKitchen
 mkdir emoji-kitchen
 cd emoji-kitchen
 uv init
@@ -667,6 +667,6 @@ This project has complete research documentation. All technical decisions have b
 ---
 
 *Action Plan Created: 2025-11-19*
-*Project Location: `/home/user/AgentBench/Projects/EmojiKitchen/`*
+*Project Location: `/home/user/EmojiKitchen/`*
 *Research Complete: Yes*
 *Ready to Start: Yes*

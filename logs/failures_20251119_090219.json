@@ -1,0 +1,38 @@
+[
+  {
+    "emoji1": "😀",
+    "emoji2": "😊",
+    "timestamp": "2025-11-19T09:02:23.699498",
+    "success": false,
+    "file_path": null,
+    "error_type": "ServerError",
+    "error_message": "HTTP 503: Server error '503 Service Unavailable' for url 'https://emojik.vercel.app/s/%F0%9F%98%80_%F0%9F%98%8A?size=512'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503",
+    "status_code": 503,
+    "duration_ms": 3911.991834640503,
+    "url": "https://emojik.vercel.app/s/😀_😊?size=512"
+  },
+  {
+    "emoji1": "🤓",
+    "emoji2": "😎",
+    "timestamp": "2025-11-19T09:02:44.681355",
+    "success": false,
+    "file_path": null,
+    "error_type": "ServerError",
+    "error_message": "HTTP 503: Server error '503 Service Unavailable' for url 'https://emojik.vercel.app/s/%F0%9F%A4%93_%F0%9F%98%8E?size=512'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503",
+    "status_code": 503,
+    "duration_ms": 3529.2840003967285,
+    "url": "https://emojik.vercel.app/s/🤓_😎?size=512"
+  },
+  {
+    "emoji1": "🥳",
+    "emoji2": "😏",
+    "timestamp": "2025-11-19T09:02:48.214984",
+    "success": false,
+    "file_path": null,
+    "error_type": "ServerError",
+    "error_message": "HTTP 503: Server error '503 Service Unavailable' for url 'https://emojik.vercel.app/s/%F0%9F%A5%B3_%F0%9F%98%8F?size=512'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503",
+    "status_code": 503,
+    "duration_ms": 3530.284881591797,
+    "url": "https://emojik.vercel.app/s/🥳_😏?size=512"
+  }
+]

@@ -1,0 +1,109 @@
+"""Path generation utilities for cross-platform emoji file storage."""
+
+import platform
+from pathlib import Path
+from typing import Literal
+from ..utils.emoji_utils import emoji_to_codepoint
+
+
+FilenameFormat = Literal['emoji', 'codepoint', 'auto']
+
+
+def detect_filename_format() -> Literal['emoji', 'codepoint']:
+    """
+    Detect appropriate filename format for current platform.
+
+    Returns:
+        'emoji' for Mac/Linux, 'codepoint' for Windows
+    """
+    system = platform.system()
+    return 'emoji' if system in ('Darwin', 'Linux') else 'codepoint'
+
+
+def generate_filename(
+    emoji1: str,
+    emoji2: str,
+    format_type: FilenameFormat = 'auto'
+) -> str:
+    """
+    Generate filename for emoji combination.
+
+    Args:
+        emoji1: First emoji
+        emoji2: Second emoji
+        format_type: Filename format ('emoji', 'codepoint', or 'auto')
+
+    Returns:
+        Filename string (e.g., "😀_👨.png" or "1f600_1f389.png")
+
+    Examples:
+        >>> generate_filename("😀", "👨", "emoji")
+        '😀_👨.png'
+        >>> generate_filename("😀", "👨", "codepoint")
+        '1f600_1f389.png'
+    """
+    if format_type == 'auto':
+        format_type = detect_filename_format()
+
+    if format_type == 'emoji':
+        return f"{emoji1}_{emoji2}.png"
+    else:
+        code1 = emoji_to_codepoint(emoji1)
+        code2 = emoji_to_codepoint(emoji2)
+        return f"{code1}_{code2}.png"
+
+
+def generate_directory_name(
+    emoji: str,
+    format_type: FilenameFormat = 'auto'
+) -> str:
+    """
+    Generate directory name for base emoji.
+
+    Args:
+        emoji: Base emoji character
+        format_type: Filename format ('emoji', 'codepoint', or 'auto')
+
+    Returns:
+        Directory name string
+
+    Examples:
+        >>> generate_directory_name("😀", "emoji")
+        '😀'
+        >>> generate_directory_name("😀", "codepoint")
+        '1f600'
+    """
+    if format_type == 'auto':
+        format_type = detect_filename_format()
+
+    if format_type == 'emoji':
+        return emoji
+    else:
+        return emoji_to_codepoint(emoji)
+
+
+def generate_full_path(
+    base_dir: Path,
+    emoji1: str,
+    emoji2: str,
+    format_type: FilenameFormat = 'auto'
+) -> Path:
+    """
+    Generate full file path for emoji combination.
+
+    Args:
+        base_dir: Base downloads directory
+        emoji1: First emoji (base directory)
+        emoji2: Second emoji
+        format_type: Filename format
+
+    Returns:
+        Full Path object
+
+    Examples:
+        >>> generate_full_path(Path("downloads"), "😀", "👨", "emoji")
+        PosixPath('downloads/😀/😀_👨.png')
+    """
+    dir_name = generate_directory_name(emoji1, format_type)
+    filename = generate_filename(emoji1, emoji2, format_type)
+    return base_dir / dir_name / filename

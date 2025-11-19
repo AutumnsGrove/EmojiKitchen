@@ -1,0 +1,333 @@
+"""Command-line interface for Emoji Kitchen downloader."""
+
+import asyncio
+import sys
+from pathlib import Path
+from typing import Optional
+
+import click
+from rich.console import Console
+
+from .orchestrator import DownloadOrchestrator
+from .utils.validators import (
+    validate_emoji_pair,
+    validate_output_directory,
+    validate_batch_file,
+    validate_delay,
+    validate_size
+)
+from .utils.reporting import print_error, print_header, print_info
+
+console = Console()
+
+
+def run_async(coro):
+    """Helper to run async functions in Click commands."""
+    return asyncio.run(coro)
+
+
+@click.group(invoke_without_command=True)
+@click.pass_context
+@click.option('--version', is_flag=True, help='Show version information')
+def main(ctx, version):
+    """
+    Emoji Kitchen CLI - Download emoji combinations from Google's Emoji Kitchen.
+
+    Run 'emoji-kitchen COMMAND --help' for command-specific help.
+    """
+    if version:
+        console.print("[bold]Emoji Kitchen CLI[/bold] v1.0.0")
+        console.print("Download emoji combinations from Google's Emoji Kitchen")
+        return
+
+    if ctx.invoked_subcommand is None:
+        # Interactive mode
+        ctx.invoke(interactive)
+
+
+@main.command()
+@click.argument('emoji1')
+@click.argument('emoji2')
+@click.option('--output', '-o', default='downloads', help='Output directory')
+@click.option('--logs', default='logs', help='Logs directory')
+@click.option('--size', '-s', default=512, type=int, help='Image size in pixels (16-512)')
+@click.option('--delay', '-d', default=100, type=int, help='Rate limit delay in milliseconds')
+@click.option('--filename-format', type=click.Choice(['emoji', 'codepoint', 'auto']),
+              default='auto', help='Filename format')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
+def pair(emoji1, emoji2, output, logs, size, delay, filename_format, verbose):
+    """Download a single emoji combination pair."""
+    print_header("Emoji Kitchen - Download Single Pair")
+
+    # Validate inputs
+    valid, error = validate_emoji_pair(emoji1, emoji2)
+    if not valid:
+        print_error(error)
+        sys.exit(1)
+
+    valid, error = validate_size(size)
+    if not valid:
+        print_error(error)
+        sys.exit(1)
+
+    valid, error = validate_delay(delay)
+    if not valid:
+        print_error(error)
+        sys.exit(1)
+
+    print_info(f"Downloading {emoji1} + {emoji2}")
+
+    async def download():
+        orchestrator = DownloadOrchestrator(
+            output_dir=Path(output),
+            log_dir=Path(logs),
+            delay_ms=delay,
+            skip_existing=True,
+            verbose=verbose,
+            filename_format=filename_format
+        )
+
+        success = await orchestrator.download_single(emoji1, emoji2, size)
+        return 0 if success else 1
+
+    exit_code = run_async(download())
+    sys.exit(exit_code)
+
+
+@main.command()
+@click.argument('batch_file')
+@click.option('--output', '-o', default='downloads', help='Output directory')
+@click.option('--logs', default='logs', help='Logs directory')
+@click.option('--size', '-s', default=512, type=int, help='Image size in pixels')
+@click.option('--delay', '-d', default=100, type=int, help='Rate limit delay in milliseconds')
+@click.option('--max-concurrent', default=50, type=int, help='Maximum concurrent downloads')
+@click.option('--filename-format', type=click.Choice(['emoji', 'codepoint', 'auto']),
+              default='auto', help='Filename format')
+@click.option('--skip-existing/--no-skip-existing', default=True,
+              help='Skip files that already exist')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
+def batch(batch_file, output, logs, size, delay, max_concurrent, filename_format,
+          skip_existing, verbose):
+    """
+    Download emoji combinations from a batch file.
+
+    Batch file format: One pair per line, emojis separated by space or comma.
+    Example:
+        = <
+        d =
+
+        =1,=6
+    """
+    print_header("Emoji Kitchen - Batch Download")
+
+    # Validate batch file
+    valid, error = validate_batch_file(batch_file)
+    if not valid:
+        print_error(error)
+        sys.exit(1)
+
+    # Parse batch file
+    emoji_pairs = []
+    try:
+        with open(batch_file, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+
+                # Split by comma or space
+                parts = line.replace(',', ' ').split()
+                if len(parts) < 2:
+                    print_error(f"Line {line_num}: Invalid format (need 2 emojis)")
+                    continue
+
+                emoji1, emoji2 = parts[0], parts[1]
+
+                # Validate pair
+                valid, error = validate_emoji_pair(emoji1, emoji2)
+                if not valid:
+                    print_error(f"Line {line_num}: {error}")
+                    continue
+
+                emoji_pairs.append((emoji1, emoji2))
+
+    except Exception as e:
+        print_error(f"Failed to read batch file: {str(e)}")
+        sys.exit(1)
+
+    if not emoji_pairs:
+        print_error("No valid emoji pairs found in batch file")
+        sys.exit(1)
+
+    print_info(f"Found {len(emoji_pairs)} emoji pairs to download")
+
+    async def download():
+        orchestrator = DownloadOrchestrator(
+            output_dir=Path(output),
+            log_dir=Path(logs),
+            delay_ms=delay,
+            max_concurrent=max_concurrent,
+            skip_existing=skip_existing,
+            verbose=verbose,
+            filename_format=filename_format
+        )
+
+        stats = await orchestrator.download_batch(emoji_pairs, size, show_progress=True)
+        return 0 if stats.failures == 0 else 1
+
+    exit_code = run_async(download())
+    sys.exit(exit_code)
+
+
+@main.command()
+def interactive():
+    """Interactive mode - prompt for emoji pairs."""
+    print_header("Emoji Kitchen - Interactive Mode")
+
+    console.print("[cyan]Enter emoji pairs to download (Ctrl+C to quit)[/cyan]")
+    console.print("[dim]Format: emoji1 emoji2 (separated by space)[/dim]\n")
+
+    emoji_pairs = []
+
+    try:
+        while True:
+            try:
+                user_input = console.input("[bold]Enter emoji pair:[/bold] ").strip()
+
+                if not user_input:
+                    continue
+
+                # Parse input
+                parts = user_input.replace(',', ' ').split()
+                if len(parts) < 2:
+                    print_error("Please enter two emojis separated by space")
+                    continue
+
+                emoji1, emoji2 = parts[0], parts[1]
+
+                # Validate
+                valid, error = validate_emoji_pair(emoji1, emoji2)
+                if not valid:
+                    print_error(error)
+                    continue
+
+                emoji_pairs.append((emoji1, emoji2))
+                console.print(f"[green][/green] Added {emoji1} + {emoji2}")
+
+                # Ask if they want to continue or download
+                choice = console.input("\n[bold](a)dd more, (d)ownload now, or (q)uit?[/bold] ").strip().lower()
+
+                if choice == 'd' and emoji_pairs:
+                    break
+                elif choice == 'q':
+                    if emoji_pairs:
+                        download = console.input(f"[yellow]Download {len(emoji_pairs)} pairs before quitting? (y/n)[/yellow] ").strip().lower()
+                        if download == 'y':
+                            break
+                    sys.exit(0)
+
+            except KeyboardInterrupt:
+                console.print("\n[yellow]Interrupted[/yellow]")
+                if emoji_pairs:
+                    download = console.input(f"Download {len(emoji_pairs)} pairs? (y/n) ").strip().lower()
+                    if download == 'y':
+                        break
+                sys.exit(0)
+
+    except EOFError:
+        sys.exit(0)
+
+    if emoji_pairs:
+        console.print(f"\n[bold]Downloading {len(emoji_pairs)} combinations...[/bold]")
+
+        async def download():
+            orchestrator = DownloadOrchestrator(
+                output_dir=Path('downloads'),
+                log_dir=Path('logs'),
+                delay_ms=100,
+                skip_existing=True,
+                verbose=False,
+                filename_format='auto'
+            )
+
+            await orchestrator.download_batch(emoji_pairs, size=512, show_progress=True)
+
+        run_async(download())
+
+
+@main.command()
+@click.argument('emoji_list_file')
+@click.option('--output', '-o', default='test-results', help='Output directory for test downloads')
+@click.option('--logs', default='logs', help='Logs directory')
+@click.option('--size', '-s', default=512, type=int, help='Image size in pixels')
+@click.option('--delay', '-d', default=100, type=int, help='Rate limit delay in milliseconds')
+@click.option('--max-concurrent', default=50, type=int, help='Maximum concurrent downloads')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
+def test(emoji_list_file, output, logs, size, delay, max_concurrent, verbose):
+    """
+    Test mode - download emoji combinations from a list file for testing.
+
+    Expected file format: One emoji pair per line (emoji1 emoji2)
+    """
+    print_header("Emoji Kitchen - Test Mode")
+
+    # Validate file
+    valid, error = validate_batch_file(emoji_list_file)
+    if not valid:
+        print_error(error)
+        sys.exit(1)
+
+    # Parse file (same as batch)
+    emoji_pairs = []
+    try:
+        with open(emoji_list_file, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+
+                parts = line.replace(',', ' ').split()
+                if len(parts) < 2:
+                    continue
+
+                emoji1, emoji2 = parts[0], parts[1]
+                valid, error = validate_emoji_pair(emoji1, emoji2)
+                if valid:
+                    emoji_pairs.append((emoji1, emoji2))
+
+    except Exception as e:
+        print_error(f"Failed to read test file: {str(e)}")
+        sys.exit(1)
+
+    print_info(f"Testing with {len(emoji_pairs)} emoji combinations")
+
+    async def download():
+        orchestrator = DownloadOrchestrator(
+            output_dir=Path(output),
+            log_dir=Path(logs),
+            delay_ms=delay,
+            max_concurrent=max_concurrent,
+            skip_existing=False,  # Don't skip in test mode
+            verbose=verbose,
+            filename_format='auto'
+        )
+
+        stats = await orchestrator.download_batch(emoji_pairs, size, show_progress=True)
+
+        # Check success rate
+        if stats.total > 0:
+            success_rate = (stats.successes / stats.total) * 100
+            if success_rate >= 75.0:
+                print_info(f" Test PASSED ({success_rate:.1f}% success rate)")
+                return 0
+            else:
+                print_error(f" Test FAILED ({success_rate:.1f}% success rate, need e75%)")
+                return 1
+        return 1
+
+    exit_code = run_async(download())
+    sys.exit(exit_code)
+
+
+if __name__ == '__main__':
+    main()

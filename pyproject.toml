@@ -1,0 +1,23 @@
+[project]
+name = "emoji-kitchen"
+version = "1.0.0"
+description = "CLI tool for downloading emoji combinations from Google's Emoji Kitchen"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.3.1",
+    "emoji>=2.15.0",
+    "httpx>=0.28.1",
+    "rich>=14.2.0",
+]
+
+[project.scripts]
+emoji-kitchen = "emoji_kitchen.cli:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "pytest>=9.0.1",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.5",
+]

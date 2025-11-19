@@ -1,0 +1,224 @@
+"""Async HTTP client for downloading emoji combinations from Emoji Kitchen API."""
+
+import asyncio
+from typing import Optional, Tuple
+import httpx
+from ..utils.emoji_utils import emoji_to_codepoint
+
+
+class EmojiKitchenClient:
+    """
+    Async HTTP client for Emoji Kitchen API.
+
+    Features:
+    - Connection pooling for performance
+    - Rate limiting with configurable delay
+    - Retry logic with exponential backoff
+    - Graceful 404 handling (non-existent combinations)
+    - Timeout configuration
+    """
+
+    BASE_URL = "https://emojik.vercel.app/s"
+
+    def __init__(
+        self,
+        delay_ms: int = 100,
+        max_concurrent: int = 50,
+        timeout_seconds: float = 10.0,
+        max_retries: int = 3
+    ):
+        """
+        Initialize Emoji Kitchen client.
+
+        Args:
+            delay_ms: Rate limiting delay in milliseconds
+            max_concurrent: Maximum concurrent connections
+            timeout_seconds: Request timeout in seconds
+            max_retries: Maximum retry attempts for failed requests
+        """
+        self.delay_ms = delay_ms
+        self.max_retries = max_retries
+
+        # HTTP client configuration
+        self.limits = httpx.Limits(
+            max_connections=max_concurrent,
+            max_keepalive_connections=min(20, max_concurrent)
+        )
+        self.timeout = httpx.Timeout(timeout_seconds, connect=5.0)
+
+        # Semaphore for concurrency control
+        self.semaphore = asyncio.Semaphore(max_concurrent)
+
+        # Client instance (created in async context)
+        self._client: Optional[httpx.AsyncClient] = None
+
+    async def __aenter__(self):
+        """Async context manager entry."""
+        self._client = httpx.AsyncClient(
+            limits=self.limits,
+            timeout=self.timeout,
+            follow_redirects=True
+        )
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit."""
+        if self._client:
+            await self._client.aclose()
+
+    def build_url(self, emoji1: str, emoji2: str, size: int = 512) -> str:
+        """
+        Build download URL for emoji combination.
+
+        Args:
+            emoji1: First emoji
+            emoji2: Second emoji
+            size: Image size in pixels (16-512)
+
+        Returns:
+            Full URL string
+
+        Examples:
+            >>> client.build_url("😀", "👨")
+            'https://emojik.vercel.app/s/😀_👨?size=512'
+        """
+        # Can use either emoji directly or codepoints
+        # Using emoji directly is simpler for the Vercel API
+        return f"{self.BASE_URL}/{emoji1}_{emoji2}?size={size}"
+
+    async def download_image(
+        self,
+        emoji1: str,
+        emoji2: str,
+        size: int = 512
+    ) -> Tuple[bool, Optional[bytes], Optional[str], Optional[int]]:
+        """
+        Download emoji combination image.
+
+        Args:
+            emoji1: First emoji
+            emoji2: Second emoji
+            size: Image size in pixels
+
+        Returns:
+            Tuple of (success, content, error_message, status_code)
+            - success: True if download succeeded
+            - content: Image bytes if successful, None otherwise
+            - error_message: Error description if failed, None otherwise
+            - status_code: HTTP status code
+
+        Examples:
+            >>> async with EmojiKitchenClient() as client:
+            ...     success, content, error, code = await client.download_image("😀", "👨")
+            ...     if success:
+            ...         print(f"Downloaded {len(content)} bytes")
+        """
+        if not self._client:
+            return False, None, "Client not initialized (use async context manager)", None
+
+        url = self.build_url(emoji1, emoji2, size)
+
+        async with self.semaphore:
+            # Attempt download with retries
+            for attempt in range(self.max_retries):
+                try:
+                    response = await self._client.get(url)
+
+                    # Check status code
+                    if response.status_code == 404:
+                        # Don't retry 404s - combination doesn't exist
+                        return False, None, "Combination not found", 404
+
+                    response.raise_for_status()
+
+                    # Apply rate limiting delay
+                    if self.delay_ms > 0:
+                        await asyncio.sleep(self.delay_ms / 1000.0)
+
+                    return True, response.content, None, response.status_code
+
+                except httpx.HTTPStatusError as e:
+                    status_code = e.response.status_code
+
+                    # Don't retry 404s
+                    if status_code == 404:
+                        return False, None, "Combination not found", 404
+
+                    # Retry on server errors (5xx)
+                    if status_code >= 500 and attempt < self.max_retries - 1:
+                        await asyncio.sleep(2 ** attempt)  # Exponential backoff
+                        continue
+
+                    return False, None, f"HTTP {status_code}: {str(e)}", status_code
+
+                except httpx.RequestError as e:
+                    # Network errors - retry with backoff
+                    if attempt < self.max_retries - 1:
+                        await asyncio.sleep(2 ** attempt)
+                        continue
+
+                    return False, None, f"Network error: {str(e)}", None
+
+                except Exception as e:
+                    return False, None, f"Unexpected error: {str(e)}", None
+
+            # All retries exhausted
+            return False, None, "Max retries exceeded", None
+
+    async def test_connection(self) -> Tuple[bool, str]:
+        """
+        Test connection to Emoji Kitchen API.
+
+        Returns:
+            Tuple of (success, message)
+        """
+        if not self._client:
+            return False, "Client not initialized"
+
+        try:
+            # Test with a known working combination
+            success, content, error, code = await self.download_image("😀", "👨")
+            if success and content:
+                return True, f"Connection OK (downloaded {len(content)} bytes)"
+            else:
+                return False, f"Connection failed: {error}"
+        except Exception as e:
+            return False, f"Connection test failed: {str(e)}"
+
+    async def batch_download(
+        self,
+        emoji_pairs: list[Tuple[str, str]],
+        size: int = 512
+    ) -> list[Tuple[str, str, bool, Optional[bytes], Optional[str], Optional[int]]]:
+        """
+        Download multiple emoji combinations concurrently.
+
+        Args:
+            emoji_pairs: List of (emoji1, emoji2) tuples
+            size: Image size in pixels
+
+        Returns:
+            List of results: (emoji1, emoji2, success, content, error, status_code)
+        """
+        tasks = [
+            self.download_with_info(emoji1, emoji2, size)
+            for emoji1, emoji2 in emoji_pairs
+        ]
+        return await asyncio.gather(*tasks)
+
+    async def download_with_info(
+        self,
+        emoji1: str,
+        emoji2: str,
+        size: int = 512
+    ) -> Tuple[str, str, bool, Optional[bytes], Optional[str], Optional[int]]:
+        """
+        Download with emoji info included in return value.
+
+        Returns:
+            (emoji1, emoji2, success, content, error, status_code)
+        """
+        success, content, error, status_code = await self.download_image(
+            emoji1, emoji2, size
+        )
+        return emoji1, emoji2, success, content, error, status_code

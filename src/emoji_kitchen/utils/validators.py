@@ -1,0 +1,155 @@
+"""Input validation functions for emoji kitchen CLI."""
+
+import platform
+from pathlib import Path
+from typing import Tuple, Optional
+from .emoji_utils import validate_emoji
+
+
+def validate_emoji_pair(emoji1: str, emoji2: str) -> Tuple[bool, Optional[str]]:
+    """
+    Validate a pair of emojis.
+
+    Args:
+        emoji1: First emoji
+        emoji2: Second emoji
+
+    Returns:
+        Tuple of (is_valid, error_message)
+        If valid, error_message is None
+
+    Examples:
+        >>> validate_emoji_pair("😀", "👨")
+        (True, None)
+        >>> validate_emoji_pair("hello", "world")
+        (False, "Invalid emoji: 'hello' is not a valid emoji")
+    """
+    if not validate_emoji(emoji1):
+        return False, f"Invalid emoji: '{emoji1}' is not a valid emoji"
+
+    if not validate_emoji(emoji2):
+        return False, f"Invalid emoji: '{emoji2}' is not a valid emoji"
+
+    return True, None
+
+
+def validate_output_directory(path: str) -> Tuple[bool, Optional[str]]:
+    """
+    Validate output directory path.
+
+    Args:
+        path: Directory path string
+
+    Returns:
+        Tuple of (is_valid, error_message)
+    """
+    try:
+        dir_path = Path(path)
+
+        # Check if it's a file (not a directory)
+        if dir_path.exists() and dir_path.is_file():
+            return False, f"Path '{path}' exists but is a file, not a directory"
+
+        # Try to create it if it doesn't exist
+        if not dir_path.exists():
+            dir_path.mkdir(parents=True, exist_ok=True)
+
+        # Check if we can write to it
+        if not dir_path.exists() or not dir_path.is_dir():
+            return False, f"Cannot create directory '{path}'"
+
+        return True, None
+
+    except PermissionError:
+        return False, f"Permission denied: cannot write to '{path}'"
+    except Exception as e:
+        return False, f"Invalid directory path '{path}': {str(e)}"
+
+
+def validate_batch_file(file_path: str) -> Tuple[bool, Optional[str]]:
+    """
+    Validate batch file exists and is readable.
+
+    Args:
+        file_path: Path to batch file
+
+    Returns:
+        Tuple of (is_valid, error_message)
+    """
+    try:
+        path = Path(file_path)
+
+        if not path.exists():
+            return False, f"File not found: '{file_path}'"
+
+        if not path.is_file():
+            return False, f"Path '{file_path}' is not a file"
+
+        # Try to read it
+        try:
+            with path.open('r', encoding='utf-8') as f:
+                f.read(1)  # Read just one byte to test
+        except Exception as e:
+            return False, f"Cannot read file '{file_path}': {str(e)}"
+
+        return True, None
+
+    except Exception as e:
+        return False, f"Invalid file path '{file_path}': {str(e)}"
+
+
+def validate_delay(delay_ms: int) -> Tuple[bool, Optional[str]]:
+    """
+    Validate rate limiting delay value.
+
+    Args:
+        delay_ms: Delay in milliseconds
+
+    Returns:
+        Tuple of (is_valid, error_message)
+    """
+    if delay_ms < 0:
+        return False, "Delay must be non-negative"
+
+    if delay_ms > 10000:
+        return False, "Delay must be less than 10 seconds (10000ms)"
+
+    return True, None
+
+
+def get_platform_filename_format() -> str:
+    """
+    Detect platform and return recommended filename format.
+
+    Returns:
+        "emoji" for Mac/Linux, "codepoint" for Windows
+
+    Examples:
+        >>> get_platform_filename_format()  # On Mac
+        'emoji'
+        >>> get_platform_filename_format()  # On Windows
+        'codepoint'
+    """
+    system = platform.system()
+    if system in ('Darwin', 'Linux'):
+        return 'emoji'
+    return 'codepoint'  # Windows and others
+
+
+def validate_size(size: int) -> Tuple[bool, Optional[str]]:
+    """
+    Validate image size parameter.
+
+    Args:
+        size: Image size in pixels
+
+    Returns:
+        Tuple of (is_valid, error_message)
+    """
+    if size < 16:
+        return False, "Size must be at least 16 pixels"
+
+    if size > 512:
+        return False, "Size must be at most 512 pixels"
+
+    return True, None

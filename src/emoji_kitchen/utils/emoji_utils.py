@@ -1,0 +1,164 @@
+"""Emoji utility functions for conversion and validation."""
+
+import unicodedata
+from typing import Optional
+import emoji as emoji_lib
+
+
+def emoji_to_codepoint(emoji_char: str) -> str:
+    """
+    Convert emoji to hex codepoint string.
+
+    Args:
+        emoji_char: Single emoji character or ZWJ sequence
+
+    Returns:
+        Hex codepoint string (e.g., "1f600" or "1f468_200d_1f4bb" for multi-part)
+
+    Examples:
+        >>> emoji_to_codepoint("😀")
+        '1f600'
+        >>> emoji_to_codepoint("=h=")
+        '1f468_200d_1f4bb'
+    """
+    if len(emoji_char) == 1:
+        return hex(ord(emoji_char))[2:]
+
+    # Handle multi-codepoint emojis (ZWJ sequences, skin tones, etc.)
+    return '_'.join(hex(ord(c))[2:] for c in emoji_char)
+
+
+def codepoint_to_emoji(codepoint: str) -> str:
+    """
+    Convert hex codepoint string to emoji.
+
+    Args:
+        codepoint: Hex codepoint (e.g., "1f600" or "1f468_200d_1f4bb")
+
+    Returns:
+        Emoji character
+
+    Examples:
+        >>> codepoint_to_emoji("1f600")
+        '😀'
+        >>> codepoint_to_emoji("1f468_200d_1f4bb")
+        '=h='
+    """
+    if '_' not in codepoint:
+        return chr(int(codepoint, 16))
+
+    # Handle multi-part codepoints
+    return ''.join(chr(int(cp, 16)) for cp in codepoint.split('_'))
+
+
+def emoji_to_gstatic_code(emoji_char: str) -> str:
+    """
+    Convert emoji to Google Static URL format (u-prefixed codepoint).
+
+    Args:
+        emoji_char: Emoji character
+
+    Returns:
+        Google format codepoint (e.g., "u1f600")
+
+    Examples:
+        >>> emoji_to_gstatic_code("😀")
+        'u1f600'
+    """
+    return f"u{emoji_to_codepoint(emoji_char)}"
+
+
+def normalize_emoji(emoji_char: str) -> str:
+    """
+    Normalize emoji to NFC form (handle variation selectors).
+
+    Args:
+        emoji_char: Emoji character
+
+    Returns:
+        Normalized emoji
+
+    Examples:
+        >>> normalize_emoji("d")  # With variation selector
+        'd'
+    """
+    return unicodedata.normalize('NFC', emoji_char)
+
+
+def validate_emoji(text: str) -> bool:
+    """
+    Validate if text contains a valid emoji.
+
+    Args:
+        text: Text to validate
+
+    Returns:
+        True if text is a valid emoji, False otherwise
+
+    Examples:
+        >>> validate_emoji("😀")
+        True
+        >>> validate_emoji("hello")
+        False
+    """
+    # Use emoji library for comprehensive validation
+    return emoji_lib.is_emoji(text)
+
+
+def extract_emoji(text: str) -> Optional[str]:
+    """
+    Extract the first emoji from text.
+
+    Args:
+        text: Text that may contain emojis
+
+    Returns:
+        First emoji found, or None if no emoji
+
+    Examples:
+        >>> extract_emoji("Hello 😀 World")
+        '😀'
+        >>> extract_emoji("No emojis here")
+        None
+    """
+    for char in text:
+        if validate_emoji(char):
+            return char
+    return None
+
+
+def is_multi_codepoint(emoji_char: str) -> bool:
+    """
+    Check if emoji is composed of multiple codepoints (ZWJ, skin tone, etc.).
+
+    Args:
+        emoji_char: Emoji character
+
+    Returns:
+        True if multi-codepoint, False otherwise
+
+    Examples:
+        >>> is_multi_codepoint("😀")
+        False
+        >>> is_multi_codepoint("=h=")
+        True
+    """
+    return len(emoji_char) > 1
+
+
+def remove_variation_selectors(emoji_char: str) -> str:
+    """
+    Remove variation selectors (U+FE0F) from emoji.
+
+    Args:
+        emoji_char: Emoji character
+
+    Returns:
+        Emoji without variation selectors
+
+    Examples:
+        >>> remove_variation_selectors("d")  # Has U+FE0F
+        'd'
+    """
+    # Remove U+FE0F (Variation Selector-16)
+    return emoji_char.replace('\uFE0F', '')
