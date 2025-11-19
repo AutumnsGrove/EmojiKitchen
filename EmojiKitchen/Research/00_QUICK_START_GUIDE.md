@@ -47,12 +47,8 @@ All necessary research has been completed overnight. Here's what we found:
 ### Step 1: Create Project (10 minutes)
 
 ```bash
-# Navigate to Projects directory
-cd /home/user/AgentBench/Projects
-
-# Create project with UV
-mkdir EmojiKitchen
-cd EmojiKitchen
+# Navigate to project directory
+cd /home/user/EmojiKitchen
 
 # Initialize with UV
 uv init
@@ -565,9 +561,9 @@ Good luck, and have fun building! 🧑‍🍳
 
 ## 📞 Quick Reference
 
-**Project Location:** `/home/user/AgentBench/Projects/EmojiKitchen`
-**Research Docs:** `/home/user/AgentBench/ProjectSpecs/EmojiKitchen_Research/`
-**Original Spec:** `/home/user/AgentBench/ProjectSpecs/EmojiKitchen_Metaprompt.md`
+**Project Location:** `/home/user/EmojiKitchen/`
+**Research Docs:** `/home/user/EmojiKitchen/EmojiKitchen/Research/`
+**Original Spec:** `/home/user/EmojiKitchen/EmojiKitchen/PROJECT_SPEC.md`
 
 **Run Command:** `uv run emoji-kitchen 😊 🎉`
 **Test Command:** `uv run pytest`

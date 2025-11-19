@@ -278,9 +278,9 @@ Detailed technical recommendations and architecture decisions.
 
 ## 📞 Support
 
-**Research Location:** `/home/user/AgentBench/ProjectSpecs/EmojiKitchen_Research/`
-**Project Spec:** `/home/user/AgentBench/ProjectSpecs/EmojiKitchen_Metaprompt.md`
-**Implementation Target:** `/home/user/AgentBench/Projects/EmojiKitchen/`
+**Research Location:** `/home/user/EmojiKitchen/EmojiKitchen/Research/`
+**Project Spec:** `/home/user/EmojiKitchen/EmojiKitchen/PROJECT_SPEC.md`
+**Implementation Target:** `/home/user/EmojiKitchen/`
 
 ---
 
