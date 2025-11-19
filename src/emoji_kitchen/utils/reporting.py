@@ -99,7 +99,7 @@ def print_failures(failures: List[Dict[str, Any]], limit: int = 10) -> None:
 
 def print_success_message(emoji1: str, emoji2: str, file_path: str) -> None:
     """Print success message for single download."""
-    console.print(f"[green][/green] Downloaded {emoji1} + {emoji2} ’ {file_path}")
+    console.print(f"[green][/green] Downloaded {emoji1} + {emoji2}  {file_path}")
 
 
 def print_error_message(emoji1: str, emoji2: str, error: str) -> None:
@@ -109,7 +109,7 @@ def print_error_message(emoji1: str, emoji2: str, error: str) -> None:
 
 def print_skip_message(emoji1: str, emoji2: str) -> None:
     """Print skip message for existing file."""
-    console.print(f"[blue]™[/blue] Skipped {emoji1} + {emoji2} (already exists)")
+    console.print(f"[blue][/blue] Skipped {emoji1} + {emoji2} (already exists)")
 
 
 def print_header(title: str) -> None:
@@ -133,7 +133,7 @@ def print_info(message: str) -> None:
 
 def print_warning(message: str) -> None:
     """Print warning message."""
-    console.print(f"[yellow] [/yellow] {message}")
+    console.print(f"[yellow][/yellow] {message}")
 
 
 def print_error(message: str) -> None:

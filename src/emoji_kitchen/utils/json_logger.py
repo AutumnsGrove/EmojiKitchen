@@ -163,7 +163,7 @@ class JSONLogger:
         self._append_to_json_file(self.success_file, result)
 
         self.logger.info(
-            f"SUCCESS: {emoji1} + {emoji2} ’ {file_path} "
+            f"SUCCESS: {emoji1} + {emoji2}  {file_path} "
             f"({duration_ms:.0f}ms)" if duration_ms else ""
         )
 

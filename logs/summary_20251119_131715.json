@@ -1,0 +1,11 @@
+{
+  "session_id": "20251119_131715",
+  "total_attempts": 251,
+  "successes": 251,
+  "failures": 0,
+  "success_rate": "100.0%",
+  "success_file": "logs/successes_20251119_131715.json",
+  "failure_file": "logs/failures_20251119_131715.json",
+  "debug_file": "logs/debug_20251119_131715.log",
+  "error_breakdown": {}
+}
