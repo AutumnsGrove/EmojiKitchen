@@ -253,10 +253,10 @@ Here are some example emoji combinations you can create:
 
 | Combination | Result |
 |-------------|--------|
-| ❤️ + 🔥 | ![❤️ + 🔥](https://emojik.vercel.app/s/❤️_🔥?size=80) |
-| 🐱 + 🌟 | ![🐱 + 🌟](https://emojik.vercel.app/s/🐱_🌟?size=80) |
-| 🎂 + 🎁 | ![🎂 + 🎁](https://emojik.vercel.app/s/🎂_🎁?size=80) |
-| 😎 + 🌴 | ![😎 + 🌴](https://emojik.vercel.app/s/😎_🌴?size=80) |
+| ❤️ + 🔥 | ![❤️ + 🔥](Examples/heart-fire.png) |
+| 🐱 + 🌟 | ![🐱 + 🌟](Examples/cat-star.png) |
+| 🎂 + 🎁 | ![🎂 + 🎁](Examples/cake-gift.png) |
+| 😎 + 🌴 | ![😎 + 🌴](Examples/cool-palm.png) |
 
 **[See all 25 examples →](EXAMPLES.md)**
 

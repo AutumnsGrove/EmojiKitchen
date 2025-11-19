@@ -8,31 +8,31 @@ A collection of 25 emoji combination examples from Google's Emoji Kitchen servic
 
 | Combination | Result |
 |-------------|--------|
-| ❤️ + 🔥 | ![❤️ + 🔥](https://emojik.vercel.app/s/❤️_🔥?size=80) |
-| 🐱 + 🌟 | ![🐱 + 🌟](https://emojik.vercel.app/s/🐱_🌟?size=80) |
-| 🎂 + 🎁 | ![🎂 + 🎁](https://emojik.vercel.app/s/🎂_🎁?size=80) |
-| 😎 + 🌴 | ![😎 + 🌴](https://emojik.vercel.app/s/😎_🌴?size=80) |
-| 🌈 + ☁️ | ![🌈 + ☁️](https://emojik.vercel.app/s/🌈_☁️?size=80) |
-| 🦄 + ✨ | ![🦄 + ✨](https://emojik.vercel.app/s/🦄_✨?size=80) |
-| 🐶 + 🎀 | ![🐶 + 🎀](https://emojik.vercel.app/s/🐶_🎀?size=80) |
-| 🌻 + 🐝 | ![🌻 + 🐝](https://emojik.vercel.app/s/🌻_🐝?size=80) |
-| 🎃 + 👻 | ![🎃 + 👻](https://emojik.vercel.app/s/🎃_👻?size=80) |
-| 🍕 + ❤️ | ![🍕 + ❤️](https://emojik.vercel.app/s/🍕_❤️?size=80) |
-| 🦋 + 🌸 | ![🦋 + 🌸](https://emojik.vercel.app/s/🦋_🌸?size=80) |
-| 🐼 + 🎋 | ![🐼 + 🎋](https://emojik.vercel.app/s/🐼_🎋?size=80) |
-| 🌙 + ⭐ | ![🌙 + ⭐](https://emojik.vercel.app/s/🌙_⭐?size=80) |
-| 🍦 + 🍫 | ![🍦 + 🍫](https://emojik.vercel.app/s/🍦_🍫?size=80) |
-| 🎸 + 🔥 | ![🎸 + 🔥](https://emojik.vercel.app/s/🎸_🔥?size=80) |
-| 🐢 + 🌊 | ![🐢 + 🌊](https://emojik.vercel.app/s/🐢_🌊?size=80) |
-| 🍀 + 🌈 | ![🍀 + 🌈](https://emojik.vercel.app/s/🍀_🌈?size=80) |
-| 🎨 + 🖌️ | ![🎨 + 🖌️](https://emojik.vercel.app/s/🎨_🖌️?size=80) |
-| 🐰 + 🥕 | ![🐰 + 🥕](https://emojik.vercel.app/s/🐰_🥕?size=80) |
-| 🌺 + 🌴 | ![🌺 + 🌴](https://emojik.vercel.app/s/🌺_🌴?size=80) |
-| ⚽ + 🏆 | ![⚽ + 🏆](https://emojik.vercel.app/s/⚽_🏆?size=80) |
-| 🎵 + 💜 | ![🎵 + 💜](https://emojik.vercel.app/s/🎵_💜?size=80) |
-| 🍩 + ☕ | ![🍩 + ☕](https://emojik.vercel.app/s/🍩_☕?size=80) |
-| 🦊 + 🍂 | ![🦊 + 🍂](https://emojik.vercel.app/s/🦊_🍂?size=80) |
-| 🌍 + 💚 | ![🌍 + 💚](https://emojik.vercel.app/s/🌍_💚?size=80) |
+| ❤️ + 🔥 | ![❤️ + 🔥](Examples/heart-fire.png) |
+| 🐱 + 🌟 | ![🐱 + 🌟](Examples/cat-star.png) |
+| 🎂 + 🎁 | ![🎂 + 🎁](Examples/cake-gift.png) |
+| 😎 + 🌴 | ![😎 + 🌴](Examples/cool-palm.png) |
+| 🌈 + ☁️ | ![🌈 + ☁️](Examples/rainbow-cloud.png) |
+| 🦄 + ✨ | ![🦄 + ✨](Examples/unicorn-sparkle.png) |
+| 🐶 + 🎀 | ![🐶 + 🎀](Examples/dog-bow.png) |
+| 🌻 + 🐝 | ![🌻 + 🐝](Examples/sunflower-bee.png) |
+| 🎃 + 👻 | ![🎃 + 👻](Examples/pumpkin-ghost.png) |
+| 🍕 + ❤️ | ![🍕 + ❤️](Examples/pizza-heart.png) |
+| 🦋 + 🌸 | ![🦋 + 🌸](Examples/butterfly-flower.png) |
+| 🐼 + 🎋 | ![🐼 + 🎋](Examples/panda-bamboo.png) |
+| 🌙 + ⭐ | ![🌙 + ⭐](Examples/moon-star.png) |
+| 🍦 + 🍫 | ![🍦 + 🍫](Examples/icecream-chocolate.png) |
+| 🎸 + 🔥 | ![🎸 + 🔥](Examples/guitar-fire.png) |
+| 🐢 + 🌊 | ![🐢 + 🌊](Examples/turtle-wave.png) |
+| 🍀 + 🌈 | ![🍀 + 🌈](Examples/clover-rainbow.png) |
+| 🎨 + 🖌️ | ![🎨 + 🖌️](Examples/art-brush.png) |
+| 🐰 + 🥕 | ![🐰 + 🥕](Examples/bunny-carrot.png) |
+| 🌺 + 🌴 | ![🌺 + 🌴](Examples/hibiscus-palm.png) |
+| ⚽ + 🏆 | ![⚽ + 🏆](Examples/soccer-trophy.png) |
+| 🎵 + 💜 | ![🎵 + 💜](Examples/music-purple.png) |
+| 🍩 + ☕ | ![🍩 + ☕](Examples/donut-coffee.png) |
+| 🦊 + 🍂 | ![🦊 + 🍂](Examples/fox-autumn.png) |
+| 🌍 + 💚 | ![🌍 + 💚](Examples/earth-green.png) |
 
 ---
 
