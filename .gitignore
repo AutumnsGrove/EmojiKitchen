@@ -6,3 +6,17 @@ __pycache__/
 
 # Temporary research files (delete after use)
 AI_TOOLS_RESEARCH.md
+
+# EmojiKitchen specific
+downloads/
+*.zip
+.emoji-kitchen/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/

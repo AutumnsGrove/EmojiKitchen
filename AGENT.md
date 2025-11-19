@@ -5,17 +5,38 @@
 ---
 
 ## Project Purpose
-[Fill in: What this project does - 1-2 sentences]
+A performant CLI tool that downloads emoji combinations from Google's Emoji Kitchen service. Supports multiple input modes (single pair, batch, all combinations, interactive), intelligent file organization, async downloads, and graceful error handling.
 
 ## Tech Stack
-[Fill in: Technologies, frameworks, and languages used]
-- Language:
-- Framework:
+- Language: Python 3.10+
+- Framework: Click (CLI framework)
 - Key Libraries:
-- Package Manager:
+  - httpx (async HTTP client with HTTP/2 support)
+  - Rich (progress bars and beautiful terminal output)
+  - emoji (emoji detection and validation)
+  - pytest, pytest-asyncio (testing)
+  - ruff (linting/formatting)
+  - mypy (type checking)
+- Package Manager: UV (modern Python dependency management)
 
 ## Architecture Notes
-[Fill in: Key architectural decisions, patterns, or structure]
+**Modular Architecture:**
+- `cli.py` - Click-based CLI interface with multiple commands
+- `orchestrator.py` - Download coordination and progress tracking
+- `api/client.py` - Async HTTP client with connection pooling and rate limiting
+- `api/metadata.py` - Metadata download, parsing, and caching
+- `storage/manager.py` - File organization by base emoji with cross-platform compatibility
+- `storage/paths.py` - Platform-aware path generation (emoji vs codepoint filenames)
+- `utils/emoji_utils.py` - Emoji-to-codepoint conversion and validation
+- `utils/validators.py` - Input validation
+- `utils/reporting.py` - Summary reports and statistics
+
+**Key Decisions:**
+- Async-first design for performance (50-100 images/second target)
+- Platform detection for emoji filenames (Mac/Linux use emoji, Windows uses codepoints)
+- Local metadata caching (~10MB JSON with 100k+ combinations)
+- Respectful rate limiting (100-200ms default delay, configurable)
+- Organized storage: `downloads/{emoji1}/{emoji1}_{emoji2}.png`
 
 ---
 
