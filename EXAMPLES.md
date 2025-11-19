@@ -1,10 +1,53 @@
-# 🍳 Emoji Kitchen Examples
+# Emoji Kitchen Examples
 
-A collection of 25 emoji combination examples from Google's Emoji Kitchen service.
+A collection of 36 emoji combination examples from Google's Emoji Kitchen service.
 
 ---
 
 ## Example Combinations
+
+### People & Faces with Elements
+
+| Combination | Result |
+|-------------|--------|
+| 😀 + 🔥 | ![😀 + 🔥](Examples/smile-fire.png) |
+| 😀 + 💧 | ![😀 + 💧](Examples/smile-water.png) |
+| 😊 + 🔥 | ![😊 + 🔥](Examples/blush-fire.png) |
+| 😎 + 🔥 | ![😎 + 🔥](Examples/cool-fire.png) |
+| 🥺 + 💧 | ![🥺 + 💧](Examples/pleading-water.png) |
+| 😤 + 💨 | ![😤 + 💨](Examples/angry-wind.png) |
+| 😮 + 💨 | ![😮 + 💨](Examples/surprised-wind.png) |
+| 👻 + 🔥 | ![👻 + 🔥](Examples/ghost-fire.png) |
+| 💀 + 🔥 | ![💀 + 🔥](Examples/skull-fire.png) |
+
+### Animals with Fire
+
+| Combination | Result |
+|-------------|--------|
+| 🐱 + 🔥 | ![🐱 + 🔥](Examples/cat-fire.png) |
+| 🐶 + 🔥 | ![🐶 + 🔥](Examples/dog-fire.png) |
+| 🦊 + 🔥 | ![🦊 + 🔥](Examples/fox-fire.png) |
+| 🐻 + 🔥 | ![🐻 + 🔥](Examples/bear-fire.png) |
+
+### Animals with Water
+
+| Combination | Result |
+|-------------|--------|
+| 🐸 + 💧 | ![🐸 + 💧](Examples/frog-water.png) |
+| 🐢 + 💧 | ![🐢 + 💧](Examples/turtle-water.png) |
+| 🐟 + 💧 | ![🐟 + 💧](Examples/fish-water.png) |
+
+### Animals with Hearts
+
+| Combination | Result |
+|-------------|--------|
+| 🐱 + ❤️ | ![🐱 + ❤️](Examples/cat-heart.png) |
+| 🐶 + ❤️ | ![🐶 + ❤️](Examples/dog-heart.png) |
+| 🐻 + ❤️ | ![🐻 + ❤️](Examples/bear-heart.png) |
+| 🐰 + ❤️ | ![🐰 + ❤️](Examples/bunny-heart.png) |
+| 🐵 + ❤️ | ![🐵 + ❤️](Examples/monkey-heart.png) |
+
+### Classic Combinations
 
 | Combination | Result |
 |-------------|--------|
@@ -14,25 +57,15 @@ A collection of 25 emoji combination examples from Google's Emoji Kitchen servic
 | 😎 + 🌴 | ![😎 + 🌴](Examples/cool-palm.png) |
 | 🌈 + ☁️ | ![🌈 + ☁️](Examples/rainbow-cloud.png) |
 | 🦄 + ✨ | ![🦄 + ✨](Examples/unicorn-sparkle.png) |
-| 🐶 + 🎀 | ![🐶 + 🎀](Examples/dog-bow.png) |
-| 🌻 + 🐝 | ![🌻 + 🐝](Examples/sunflower-bee.png) |
 | 🎃 + 👻 | ![🎃 + 👻](Examples/pumpkin-ghost.png) |
 | 🍕 + ❤️ | ![🍕 + ❤️](Examples/pizza-heart.png) |
 | 🦋 + 🌸 | ![🦋 + 🌸](Examples/butterfly-flower.png) |
-| 🐼 + 🎋 | ![🐼 + 🎋](Examples/panda-bamboo.png) |
 | 🌙 + ⭐ | ![🌙 + ⭐](Examples/moon-star.png) |
-| 🍦 + 🍫 | ![🍦 + 🍫](Examples/icecream-chocolate.png) |
 | 🎸 + 🔥 | ![🎸 + 🔥](Examples/guitar-fire.png) |
 | 🐢 + 🌊 | ![🐢 + 🌊](Examples/turtle-wave.png) |
-| 🍀 + 🌈 | ![🍀 + 🌈](Examples/clover-rainbow.png) |
 | 🎨 + 🖌️ | ![🎨 + 🖌️](Examples/art-brush.png) |
-| 🐰 + 🥕 | ![🐰 + 🥕](Examples/bunny-carrot.png) |
 | 🌺 + 🌴 | ![🌺 + 🌴](Examples/hibiscus-palm.png) |
 | ⚽ + 🏆 | ![⚽ + 🏆](Examples/soccer-trophy.png) |
-| 🎵 + 💜 | ![🎵 + 💜](Examples/music-purple.png) |
-| 🍩 + ☕ | ![🍩 + ☕](Examples/donut-coffee.png) |
-| 🦊 + 🍂 | ![🦊 + 🍂](Examples/fox-autumn.png) |
-| 🌍 + 💚 | ![🌍 + 💚](Examples/earth-green.png) |
 
 ---
 
