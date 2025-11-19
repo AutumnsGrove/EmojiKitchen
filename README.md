@@ -258,6 +258,8 @@ Here are some example emoji combinations you can create:
 | 🎂 + 🎁 | ![🎂 + 🎁](https://emojik.vercel.app/s/🎂_🎁?size=80) |
 | 😎 + 🌴 | ![😎 + 🌴](https://emojik.vercel.app/s/😎_🌴?size=80) |
 
+**[See all 25 examples →](EXAMPLES.md)**
+
 ---
 
 **Built with ❤️ using Claude Code and the BaseProject template**
