@@ -13,7 +13,7 @@ from emoji_kitchen.orchestrator import DownloadOrchestrator
 
 async def main():
     # Read test file
-    test_file = Path('test_emojis_250.txt')
+    test_file = Path('Tests/Data/test_emojis_250.txt')
     emoji_pairs = []
 
     with open(test_file, 'r', encoding='utf-8') as f:
