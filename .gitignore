@@ -9,7 +9,9 @@ AI_TOOLS_RESEARCH.md
 
 # EmojiKitchen specific
 downloads/
-*.zip
+bulk-downloads/
+# Allow emoji combinations zip
+!emoji-combinations-*.zip
 .emoji-kitchen/
 *.pyc
 .pytest_cache/
