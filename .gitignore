@@ -9,6 +9,7 @@ AI_TOOLS_RESEARCH.md
 
 # EmojiKitchen specific
 downloads/
+bulk-downloads/
 *.zip
 .emoji-kitchen/
 *.pyc
